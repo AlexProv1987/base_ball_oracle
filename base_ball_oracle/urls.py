@@ -18,4 +18,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("question_api/", include("bb_oracle_apps.questions_api.urls")),
+    path("calculater_api/", include("bb_oracle_apps.calculators.urls"))
 ]
