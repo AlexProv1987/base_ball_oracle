@@ -1,27 +1,30 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView, CreateAPIView
 from rest_framework.response import Response
 from rest_framework import status
-import openai
-from base_ball_oracle.settings import OPEN_API_KEY, OPEN_AI_MODEL
+from .question_mixins import AIMessageMixIn
+from .serializers import QuestionInfoSerializer
+from .models import questions
+from base_ball_oracle.settings import OPEN_API_KEY, OPEN_AI_MODEL, PROJECT_SPORT
 # Create your views here.
 
-class Question(APIView):
+class Question(APIView,AIMessageMixIn):
+    preq_val = f'Pretend you are a {PROJECT_SPORT} coach and explain the following in three sentences:'
+    question_key = 'question'
+    ai_key = OPEN_API_KEY
+    ai_model = OPEN_AI_MODEL
 
     def get(self,request,*args,**kwargs):
-        age = request.data['age']
-        question = request.data['question']
-        openai.api_key = OPEN_API_KEY
-        response_msg = openai.ChatCompletion.create(
-        #different models have different capabilities
-        model = OPEN_AI_MODEL,
-        #length of response
-        max_tokens=1024,
-        #determinism level lower is more
-        temperature = 0,
-        messages = [{
-            'role':'user',
-            'content': f'For a {age} year old, {question}?',
-        }],
-        )
-        return Response(data=response_msg.choices[0].message.content, status=status.HTTP_200_OK)
+        answer = self.ai_answer(request.data[self.get_question_key()])
+        self.capture_question(answer,f'{self.preq_val} {request.data[self.get_question_key()]}')
+        return Response(data=self.ai_answer(request.data[self.get_question_key()]), status=status.HTTP_200_OK)
+    
+    def capture_question(self,answer,request):
+        serializer = QuestionInfoSerializer(data={'question_text':request, 'question_reply':answer})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+class QuestionData(ListAPIView):
+    queryset=questions.objects.all()
+    serializer_class=QuestionInfoSerializer
