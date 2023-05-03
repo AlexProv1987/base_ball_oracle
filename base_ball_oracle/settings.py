@@ -11,9 +11,14 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+
 #OpenAI Key
-OPEN_API_KEY = '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'
+OPEN_API_KEY = os.environ.get('OPEN_API_KEY')
 OPEN_AI_MODEL = 'gpt-3.5-turbo'
+
+#sport type
+PROJECT_SPORT = 'baseball'
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -22,7 +27,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '0e9!)*k40rp#gvz5n5q8ar^&e4q!&@sx#!=-b1^n=d(z4!jy6k'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -40,7 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'bb_oracle_apps.questions_api'
+    'bb_oracle_apps.questions_api',
+    'bb_oracle_apps.calculators',
 ]
 
 MIDDLEWARE = [
@@ -117,6 +123,9 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Default primary key field type
+# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
