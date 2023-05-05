@@ -51,8 +51,8 @@ class AIMessageMixIn():
     
     def get_ai_key(self):
         ai_key = self.ai_key
-        assert self.question_key is not None,(
-            "'%s'Should include ai_model or override 'get_ai_model()' method."
+        assert self.ai_key is not None,(
+            "'%s'Should include ai_key or override 'get_ai_key()' method."
             % self.__class__.__name__
         )
         return ai_key
