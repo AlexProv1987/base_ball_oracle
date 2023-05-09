@@ -16,9 +16,9 @@ class Question(APIView,AIMessageMixIn):
     ai_model = OPEN_AI_MODEL
 
     def get(self,request,*args,**kwargs):
-        answer = self.ai_answer(request.data[self.get_question_key()])
-        self.capture_question(answer,f'{self.preq_val} {request.data[self.get_question_key()]}')
-        return Response(data=self.ai_answer(request.data[self.get_question_key()]), status=status.HTTP_200_OK)
+        answer = self.ai_answer(request.query_params[self.get_question_key()])
+        self.capture_question(answer,f'{self.preq_val} {request.query_params[self.get_question_key()]}')
+        return Response(data={'answer':answer}, status=status.HTTP_200_OK)
     
     def capture_question(self,answer,request):
         serializer = QuestionInfoSerializer(data={'question_text':request, 'question_reply':answer})

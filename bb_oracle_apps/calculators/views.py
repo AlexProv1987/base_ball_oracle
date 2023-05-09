@@ -7,15 +7,15 @@ from .equip_sizes import GloveSize, BatSize
 
 class GloveView(APIView,GloveSize):
     def get(self,request,*args,**kwargs):
-        self.set_player_level(int(request.data['age']))
+        self.set_player_level(int(request.query_params['age']))
         return Response(data={
             'level': self.player_level, 
-            'size':self.get_glove_size(request.data['position'])}, 
+            'size':self.get_glove_size(request.query_params['position'])}, 
             status=status.HTTP_200_OK)
 
 class BatView(APIView, BatSize):
     def get(self,request,*args,**kwargs):
-        bat = self.get_bat_size(int(request.data['height']),int(request.data['weight']))
+        bat = self.get_bat_size(int(request.query_params['height']),int(request.query_params['weight']))
         if bat is None:
             return Response(data ={'bat_size':'None Found'}
                             ,status=status.HTTP_200_OK)
