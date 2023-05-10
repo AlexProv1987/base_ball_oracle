@@ -16,23 +16,28 @@ class LeagueFinder(APIView, GlobalLevels):
     
     def get_avail_options(self,request):
         places = self.google_maps.places_nearby(
-        keyword=self.create_query_string(request.data['age']), 
+        keyword=self.create_query_string(request.query_params['age']), 
         location=self.get_person_location(request),
-        radius=ConvertValue.convert(request.data['distance'],1609),
+        radius=ConvertValue.convert(25,1609),
         language='en-US',
         )
         shrunk = self.consolidate_response(places)
         return shrunk
     
     def get_person_location(self,request):
-        get_location = self.google_maps.geocode(address=f"{request.data['address']}, {request.data['city']}, {request.data['state']}, {request.data['zip']}")
+        get_location = self.google_maps.geocode({request.query_params['zip']})
         location = f"{get_location[0]['geometry']['location']['lat']},{get_location[0]['geometry']['location']['lng']}"
         return location
 
     def consolidate_response(self,locresponse):
         avail_list = []
+        i = 0
         for place in locresponse['results']:
-            avail_list.append({'name':place['name'], 'address':place['vicinity']})
+            if i < 3:
+                avail_list.append({'name':place['name'], 'address':place['vicinity']})
+            else:
+                return avail_list
+            i+=1
         return avail_list
     
     def create_query_string(self, age_req):

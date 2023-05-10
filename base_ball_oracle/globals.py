@@ -29,5 +29,4 @@ class ConvertValue():
     @staticmethod
     def convert(value,conversion_rate) -> int:
         converted = int(value)*int(conversion_rate)
-        print(converted)
         return converted
