@@ -5,14 +5,18 @@ from rest_framework import status
 from base_ball_oracle.settings import GOOGLE_MAPS_API_KEY, PROJECT_SPORT
 from base_ball_oracle.globals import GlobalLevels, ConvertValue
 import googlemaps
+from base_ball_oracle.global_mixins import ValidateParamsMixIn
 # Create your views here.
-class LeagueFinder(APIView, GlobalLevels):
+class LeagueFinder(APIView, GlobalLevels,ValidateParamsMixIn):
 
     google_maps = googlemaps.Client(key=GOOGLE_MAPS_API_KEY)
-
+    accepted_params = {'age':int.__name__, 'zip':int.__name__}
     def get(self,request,*args,**kwargs):
-        avail_places = self.get_avail_options(request)
-        return Response(data={'totalplaces':len(avail_places), 'places':avail_places}, status=status.HTTP_200_OK)
+        if self.validate_keys(request):
+            avail_places = self.get_avail_options(request)
+            return Response(data={'totalplaces':len(avail_places), 'places':avail_places}, status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
     
     def get_avail_options(self,request):
         places = self.google_maps.places_nearby(
@@ -48,5 +52,5 @@ class LeagueFinder(APIView, GlobalLevels):
         if level is GlobalLevels.T_BALL:
             qs = f'{level} league'
         else:
-            qs = f'{level} league'
+            qs = f'{level} {PROJECT_SPORT} league'
         return qs
