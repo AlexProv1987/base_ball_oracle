@@ -6,6 +6,7 @@ from base_ball_oracle.settings import GOOGLE_MAPS_API_KEY, PROJECT_SPORT
 from base_ball_oracle.globals import GlobalLevels, ConvertValue
 import googlemaps
 from base_ball_oracle.global_mixins import ValidateParamsMixIn
+from .serializers import SearchedLeaugesSerializer
 # Create your views here.
 class LeagueFinder(APIView, GlobalLevels,ValidateParamsMixIn):
 
@@ -21,15 +22,16 @@ class LeagueFinder(APIView, GlobalLevels,ValidateParamsMixIn):
     def get_avail_options(self,request):
         places = self.google_maps.places_nearby(
         keyword=self.create_query_string(request.query_params['age']), 
-        location=self.get_person_location(request),
+        location=self.get_person_location(request.query_params['zip']),
         radius=ConvertValue.convert(25,1609),
         language='en-US',
         )
+        self.capture_request(request.query_params['zip'],places['results'])
         shrunk = self.consolidate_response(places)
         return shrunk
     
-    def get_person_location(self,request):
-        get_location = self.google_maps.geocode({request.query_params['zip']})
+    def get_person_location(self,zip):
+        get_location = self.google_maps.geocode(zip)
         location = f"{get_location[0]['geometry']['location']['lat']},{get_location[0]['geometry']['location']['lng']}"
         return location
 
@@ -54,3 +56,9 @@ class LeagueFinder(APIView, GlobalLevels,ValidateParamsMixIn):
         else:
             qs = f'{level} {PROJECT_SPORT} league'
         return qs
+    
+    def capture_request(self,zip,places):
+        serializer = SearchedLeaugesSerializer(data={'total_found':len(places), 
+                                                     'zip_searched':zip})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()

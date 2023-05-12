@@ -13,9 +13,12 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 
 #OpenAI Key
-OPEN_API_KEY = os.environ.get('OPEN_API_KEY')
+OPEN_API_KEY = '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' 
+#os.environ.get('OPEN_API_KEY')
 OPEN_AI_MODEL = 'gpt-3.5-turbo'
-
+#Google Maps API
+GOOGLE_MAPS_API_KEY = 'AIzaSyAv29PAQvGNkPFgSrtYSQmCV1p-aac44iw'
+#AIzaSyAv29PAQvGNkPFgSrtYSQmCV1p-aac44iw
 #sport type
 PROJECT_SPORT = 'baseball'
 
@@ -27,7 +30,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = '0e9!)*k40rp#gvz5n5q8ar^&e4q!&@sx#!=-b1^n=d(z4!jy6k'
+#os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -45,13 +49,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders',
     'bb_oracle_apps.questions_api',
     'bb_oracle_apps.calculators',
+    'bb_oracle_apps.league_finder',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -60,6 +67,10 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'base_ball_oracle.urls'
+
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:3000',
+)
 
 TEMPLATES = [
     {
