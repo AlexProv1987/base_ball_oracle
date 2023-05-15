@@ -13,12 +13,11 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 
 #OpenAI Key
-OPEN_API_KEY = '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' 
-#os.environ.get('OPEN_API_KEY')
-OPEN_AI_MODEL = 'gpt-3.5-turbo'
+OPEN_API_KEY = os.environ['OPEN_API_KEY']
+#openAI Model
+OPEN_AI_MODEL = os.environ['OPEN_AI_MODEL']
 #Google Maps API
-GOOGLE_MAPS_API_KEY = 'AIzaSyAv29PAQvGNkPFgSrtYSQmCV1p-aac44iw'
-#AIzaSyAv29PAQvGNkPFgSrtYSQmCV1p-aac44iw
+GOOGLE_MAPS_API_KEY = os.environ['GOOGLE_MAPS_API_KEY']
 #sport type
 PROJECT_SPORT = 'baseball'
 
@@ -30,8 +29,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '0e9!)*k40rp#gvz5n5q8ar^&e4q!&@sx#!=-b1^n=d(z4!jy6k'
-#os.environ.get('SECRET_KEY')
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -69,7 +67,6 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'base_ball_oracle.urls'
 
 CORS_ORIGIN_WHITELIST = (
-    'http://localhost:3000',
 )
 
 TEMPLATES = [
@@ -96,9 +93,13 @@ WSGI_APPLICATION = 'base_ball_oracle.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+       'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ['RDS_DB_NAME'],
+        'USER': os.environ['RDS_USERNAME'],
+        'PASSWORD': os.environ['RDS_PASSWORD'],
+        'HOST': os.environ['RDS_HOSTNAME'],
+        'PORT': os.environ['RDS_PORT'],
+   }
 }
 
 
