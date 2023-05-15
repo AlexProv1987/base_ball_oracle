@@ -34,7 +34,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['base-ball-oracle-dev.us-east-1.elasticbeanstalk.com',]
+ALLOWED_HOSTS = ['base-ball-oracle-dev.us-east-1.elasticbeanstalk.com']
 
 
 # Application definition
@@ -93,7 +93,7 @@ WSGI_APPLICATION = 'base_ball_oracle.wsgi.application'
 
 DATABASES = {
     'default': {
-       'ENGINE': 'django.db.backends.postgresql',
+       'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': os.environ['RDS_DB_NAME'],
         'USER': os.environ['RDS_USERNAME'],
         'PASSWORD': os.environ['RDS_PASSWORD'],
