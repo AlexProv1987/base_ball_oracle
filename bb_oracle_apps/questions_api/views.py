@@ -7,18 +7,22 @@ from .question_mixins import AIMessageMixIn
 from .serializers import QuestionInfoSerializer
 from .models import questions
 from base_ball_oracle.settings import OPEN_API_KEY, OPEN_AI_MODEL, PROJECT_SPORT
+from base_ball_oracle.global_mixins import ValidateParamsMixIn
 # Create your views here.
 
-class Question(APIView,AIMessageMixIn):
+class Question(APIView,AIMessageMixIn,ValidateParamsMixIn):
     preq_val = f'Pretend you are a {PROJECT_SPORT} coach and explain the following in three sentences:'
     question_key = 'question'
     ai_key = OPEN_API_KEY
     ai_model = OPEN_AI_MODEL
-
+    accepted_params = {'question':int.__name__}
     def get(self,request,*args,**kwargs):
-        answer = self.ai_answer(request.data[self.get_question_key()])
-        self.capture_question(answer,f'{self.preq_val} {request.data[self.get_question_key()]}')
-        return Response(data=self.ai_answer(request.data[self.get_question_key()]), status=status.HTTP_200_OK)
+        if self.validate_keys(request):
+            answer = self.ai_answer(request.query_params[self.get_question_key()])
+            self.capture_question(answer,f'{self.preq_val} {request.query_params[self.get_question_key()]}')
+            return Response(data={'answer':answer}, status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
     
     def capture_question(self,answer,request):
         serializer = QuestionInfoSerializer(data={'question_text':request, 'question_reply':answer})
