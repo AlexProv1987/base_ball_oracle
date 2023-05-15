@@ -12,6 +12,7 @@ class LeagueFinder(APIView, GlobalLevels,ValidateParamsMixIn):
 
     google_maps = googlemaps.Client(key=GOOGLE_MAPS_API_KEY)
     accepted_params = {'age':int.__name__, 'zip':int.__name__}
+
     def get(self,request,*args,**kwargs):
         if self.validate_keys(request):
             avail_places = self.get_avail_options(request)
@@ -26,9 +27,10 @@ class LeagueFinder(APIView, GlobalLevels,ValidateParamsMixIn):
         radius=ConvertValue.convert(25,1609),
         language='en-US',
         )
-        self.capture_request(request.query_params['zip'],places['results'])
-        shrunk = self.consolidate_response(places)
-        return shrunk
+        self.capture_request(request.query_params['zip'],len(places['results']))
+        place_ids = self.consolidate_response(places)
+        detailed_places = self.return_place_details(place_ids)
+        return detailed_places
     
     def get_person_location(self,zip):
         get_location = self.google_maps.geocode(zip)
@@ -40,12 +42,22 @@ class LeagueFinder(APIView, GlobalLevels,ValidateParamsMixIn):
         i = 0
         for place in locresponse['results']:
             if i < 3:
-                avail_list.append({'name':place['name'], 'address':place['vicinity']})
+                avail_list.append(place['place_id'])
             else:
                 return avail_list
             i+=1
         return avail_list
     
+    def return_place_details(self, places):
+        place_details = []
+        for place in places:
+            phone_num = 'Not Available'
+            p_detail = self.google_maps.place(place_id=place)
+            if 'formatted_phone_number' in p_detail['result']:
+                phone_num = p_detail['result']['formatted_phone_number']
+            place_details.append({'name':p_detail['result']['name'],'address':p_detail['result']['formatted_address'],'phone': phone_num})
+        return place_details
+
     def create_query_string(self, age_req):
         qs = ''
         level = self.get_player_level(int(age_req))
@@ -57,8 +69,9 @@ class LeagueFinder(APIView, GlobalLevels,ValidateParamsMixIn):
             qs = f'{level} {PROJECT_SPORT} league'
         return qs
     
-    def capture_request(self,zip,places):
-        serializer = SearchedLeaugesSerializer(data={'total_found':len(places), 
+
+    def capture_request(self,zip,places_cnt):
+        serializer = SearchedLeaugesSerializer(data={'total_found':places_cnt, 
                                                      'zip_searched':zip})
         serializer.is_valid(raise_exception=True)
         serializer.save()
