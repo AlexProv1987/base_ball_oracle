@@ -52,10 +52,13 @@ class LeagueFinder(APIView, GlobalLevels,ValidateParamsMixIn):
         place_details = []
         for place in places:
             phone_num = 'Not Available'
+            web_site = 'Not Available'
             p_detail = self.google_maps.place(place_id=place)
             if 'formatted_phone_number' in p_detail['result']:
                 phone_num = p_detail['result']['formatted_phone_number']
-            place_details.append({'name':p_detail['result']['name'],'address':p_detail['result']['formatted_address'],'phone': phone_num})
+            if 'website' in p_detail['result']:
+                web_site = p_detail['result']['website']
+            place_details.append({'name':p_detail['result']['name'],'address':p_detail['result']['formatted_address'],'phone': phone_num,'website':web_site})
         return place_details
 
     def create_query_string(self, age_req):
