@@ -14,10 +14,10 @@ class LeagueFinder(APIView,GlobalLevels,ValidateParamsMixIn):
     accepted_params = {'age':int.__name__, 'zip':int.__name__}
 
     def get(self,request,*args,**kwargs):
-        if self.validate_keys(request):
+        if self.validate_keys(request, 'all'):
             avail_places = self.get_avail_options(request)
             if avail_places is None:
-                return Response(data={'error':'Zip code Invalid'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                return Response(data={'error':'Zip code Invalid'}, status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response(data={'totalplaces':len(avail_places), 'places':avail_places}, status=status.HTTP_200_OK)
         else:
@@ -49,8 +49,8 @@ class LeagueFinder(APIView,GlobalLevels,ValidateParamsMixIn):
         return detailed_places
     
     def get_person_location(self,zip):
-        get_location = self.google_maps.geocode(zip)
         try:
+            get_location = self.google_maps.geocode(zip)
             location = f"{get_location[0]['geometry']['location']['lat']},{get_location[0]['geometry']['location']['lng']}"
             return location
         except:
