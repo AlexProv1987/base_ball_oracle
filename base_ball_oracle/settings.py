@@ -48,9 +48,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
+    'django_filters',
     'bb_oracle_apps.questions_api',
     'bb_oracle_apps.calculators',
     'bb_oracle_apps.league_finder',
+    'bb_oracle_apps.data_extracts',
 ]
 
 MIDDLEWARE = [
