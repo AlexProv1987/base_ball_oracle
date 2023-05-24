@@ -5,7 +5,6 @@ from rest_framework.response import Response
 from rest_framework import status
 from .question_mixins import AIMessageMixIn
 from .serializers import QuestionInfoSerializer
-from .models import questions
 from base_ball_oracle.settings import OPEN_API_KEY, OPEN_AI_MODEL, PROJECT_SPORT
 from base_ball_oracle.global_mixins import ValidateParamsMixIn
 # Create your views here.
@@ -28,7 +27,3 @@ class Question(APIView,AIMessageMixIn,ValidateParamsMixIn):
         serializer = QuestionInfoSerializer(data={'question_text':request, 'question_reply':answer})
         serializer.is_valid(raise_exception=True)
         serializer.save()
-
-class QuestionData(ListAPIView):
-    queryset=questions.objects.all()
-    serializer_class=QuestionInfoSerializer

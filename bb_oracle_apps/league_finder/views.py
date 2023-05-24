@@ -26,16 +26,17 @@ class LeagueFinder(APIView,GlobalLevels,ValidateParamsMixIn):
     def get_avail_options(self,request):
         detailed_places = None
         geolocation = self.get_person_location(request.query_params['zip'])
+        
         if geolocation is None:
             return detailed_places
         else:
             level = self.get_player_level(int(request.query_params['age']))
             places = self.google_maps.places_nearby(
-            keyword=self.create_query_string(level), 
-            location=self.get_person_location(request.query_params['zip']),
-            radius=ConvertValue.convert(25,1609),
-            language='en-US',
-            )
+                    keyword=self.create_query_string(level), 
+                    location=self.get_person_location(request.query_params['zip']),
+                    radius=ConvertValue.convert(25,1609),
+                    language='en-US',
+                    )
 
             self.capture_request(kwargs={'age_searched':request.query_params['zip'],
                                     'total_found':len(places['results']),

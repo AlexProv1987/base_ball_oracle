@@ -3,4 +3,4 @@ from .models import searchedleagues
 class SearchedLeaugesSerializer(serializers.ModelSerializer):
     class Meta:
         model=searchedleagues
-        fields = ['total_found', 'zip_searched', 'search_date']
+        fields = ['total_found', 'zip_searched', 'search_date', 'age_searched', 'sport_level', 'radius']
