@@ -1,4 +1,3 @@
-
 class ValidateParamsMixIn():
     accepted_params = {}
     def validate_keys(self, request, required_amt):
