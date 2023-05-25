@@ -7,7 +7,11 @@ from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 from .filters import QuestionFilter, LeagueFilter
 from base_ball_oracle.global_mixins import ValidateParamsMixIn
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 class QuestionHist(generics.ListAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     queryset=questions.objects.all()
     serializer_class=QuestionInfoSerializer
     filter_backends = [DjangoFilterBackend,filters.SearchFilter]
@@ -15,6 +19,8 @@ class QuestionHist(generics.ListAPIView):
     search_fields = ['question_text',]
 
 class LeagueHist(generics.ListAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     queryset = searchedleagues.objects.all()
     serializer_class = SearchedLeaugesSerializer
     filter_backends = [DjangoFilterBackend]
