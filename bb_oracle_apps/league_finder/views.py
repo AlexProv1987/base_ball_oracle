@@ -17,7 +17,7 @@ class LeagueFinder(APIView,GlobalLevels,ValidateParamsMixIn):
         if self.validate_keys(request, 'all'):
             avail_places = self.get_avail_options(request)
             if avail_places is None:
-                return Response(data={'error':'Zip code Invalid'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response(data={'error':'Invalid Zip Code'}, status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response(data={'totalplaces':len(avail_places), 'places':avail_places}, status=status.HTTP_200_OK)
         else:
