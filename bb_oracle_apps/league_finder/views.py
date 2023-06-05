@@ -13,7 +13,8 @@ class LeagueFinder(APIView,GlobalLevels,ValidateParamsMixIn):
     google_maps = googlemaps.Client(key=GOOGLE_MAPS_API_KEY)
     accepted_params = {'age':int.__name__, 'zip':int.__name__}
     level_chart = {
-        't-ball':range(0,7)
+        GlobalLevels.T_BALL:range(0,7),
+        'all': range(7,100)
     }
     def get(self,request,*args,**kwargs):
         if self.validate_keys(request, 'all'):
@@ -39,7 +40,7 @@ class LeagueFinder(APIView,GlobalLevels,ValidateParamsMixIn):
                     radius=ConvertValue.convert(25,1609),
                     language='en-US',
                     )
-
+            
             self.capture_request(kwargs={'age_searched':request.query_params['zip'],
                                     'total_found':len(places['results']),
                                     'zip_searched':request.query_params['zip'],
@@ -57,6 +58,7 @@ class LeagueFinder(APIView,GlobalLevels,ValidateParamsMixIn):
             return location
         except:
             return None
+        
     def consolidate_response(self,locresponse):
         avail_list = []
         i = 0
