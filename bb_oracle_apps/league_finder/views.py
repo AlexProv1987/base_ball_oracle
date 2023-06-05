@@ -12,7 +12,9 @@ class LeagueFinder(APIView,GlobalLevels,ValidateParamsMixIn):
 
     google_maps = googlemaps.Client(key=GOOGLE_MAPS_API_KEY)
     accepted_params = {'age':int.__name__, 'zip':int.__name__}
-
+    level_chart = {
+        't-ball':range(0,7)
+    }
     def get(self,request,*args,**kwargs):
         if self.validate_keys(request, 'all'):
             avail_places = self.get_avail_options(request)
@@ -81,12 +83,10 @@ class LeagueFinder(APIView,GlobalLevels,ValidateParamsMixIn):
 
     def create_query_string(self, level):
         qs = ''
-        if level is None:
-            qs = f'{PROJECT_SPORT} league'
         if level is GlobalLevels.T_BALL:
             qs = f'{level} league'
         else:
-            qs = f'{level} {PROJECT_SPORT} league'
+            qs = f'{PROJECT_SPORT} league'
         return qs
     
 
