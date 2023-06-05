@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'ebhealthcheck.apps.EBHealthCheckConfig',
+    'rest_framework.authtoken',
     'corsheaders',
     'django_filters',
     'bb_oracle_apps.questions_api',
