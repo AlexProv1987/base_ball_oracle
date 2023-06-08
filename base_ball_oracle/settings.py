@@ -76,6 +76,7 @@ CORS_ORIGIN_WHITELIST = (
     "https://stable.d17lslnqu904pd.amplifyapp.com",
     "https://master.d1h7gu3k5d0iyx.amplifyapp.com",
     "https://www.baseballoracle.org",
+    "https://master.d203db3lu1c7s3.amplifyapp.com",
     )
 
 TEMPLATES = [
