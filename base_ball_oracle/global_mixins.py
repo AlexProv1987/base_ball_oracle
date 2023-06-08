@@ -1,13 +1,18 @@
 class ValidateParamsMixIn():
     accepted_params = {}
-    def validate_keys(self, request):
+    def validate_keys(self, request, required_amt):
         param_cnt = 0
         params = self.get_accepted_params()
         for param in request.query_params.keys():
             if param in params.keys():
                 if len(request.query_params[param]) != 0:
                     param_cnt+=1
-        if self.all_present(param_cnt):
+            else:
+                return False
+        if required_amt == 'all':
+            if self.all_present(param_cnt):
+                return True
+        else:
             return True
         return False
 

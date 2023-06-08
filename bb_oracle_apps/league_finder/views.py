@@ -8,35 +8,57 @@ import googlemaps
 from base_ball_oracle.global_mixins import ValidateParamsMixIn
 from .serializers import SearchedLeaugesSerializer
 # Create your views here.
-class LeagueFinder(APIView, GlobalLevels,ValidateParamsMixIn):
+class LeagueFinder(APIView,GlobalLevels,ValidateParamsMixIn):
 
     google_maps = googlemaps.Client(key=GOOGLE_MAPS_API_KEY)
     accepted_params = {'age':int.__name__, 'zip':int.__name__}
-
+    level_chart = {
+        GlobalLevels.T_BALL:range(0,7),
+        'all': range(7,100)
+    }
     def get(self,request,*args,**kwargs):
-        if self.validate_keys(request):
+        if self.validate_keys(request, 'all'):
             avail_places = self.get_avail_options(request)
-            return Response(data={'totalplaces':len(avail_places), 'places':avail_places}, status=status.HTTP_200_OK)
+            if avail_places is None:
+                return Response(data={'error':'Invalid Zip Code'}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response(data={'totalplaces':len(avail_places), 'places':avail_places}, status=status.HTTP_200_OK)
         else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={'error':'Invalid Params', 'available':self.get_accepted_params()}, status=status.HTTP_400_BAD_REQUEST)
     
     def get_avail_options(self,request):
-        places = self.google_maps.places_nearby(
-        keyword=self.create_query_string(request.query_params['age']), 
-        location=self.get_person_location(request.query_params['zip']),
-        radius=ConvertValue.convert(25,1609),
-        language='en-US',
-        )
-        self.capture_request(request.query_params['zip'],len(places['results']))
-        place_ids = self.consolidate_response(places)
-        detailed_places = self.return_place_details(place_ids)
+        detailed_places = None
+        geolocation = self.get_person_location(request.query_params['zip'])
+        
+        if geolocation is None:
+            return detailed_places
+        else:
+            level = self.get_player_level(int(request.query_params['age']))
+            places = self.google_maps.places_nearby(
+                    keyword=self.create_query_string(level), 
+                    location=self.get_person_location(request.query_params['zip']),
+                    radius=ConvertValue.convert(25,1609),
+                    language='en-US',
+                    )
+            
+            self.capture_request(kwargs={'age_searched':request.query_params['zip'],
+                                    'total_found':len(places['results']),
+                                    'zip_searched':request.query_params['zip'],
+                                    'sport_level':level,
+                                    'age_searched':request.query_params['age']})
+        
+            place_ids = self.consolidate_response(places)
+            detailed_places = self.return_place_details(place_ids)
         return detailed_places
     
     def get_person_location(self,zip):
-        get_location = self.google_maps.geocode(zip)
-        location = f"{get_location[0]['geometry']['location']['lat']},{get_location[0]['geometry']['location']['lng']}"
-        return location
-
+        try:
+            get_location = self.google_maps.geocode(zip)
+            location = f"{get_location[0]['geometry']['location']['lat']},{get_location[0]['geometry']['location']['lng']}"
+            return location
+        except:
+            return None
+   
     def consolidate_response(self,locresponse):
         avail_list = []
         i = 0
@@ -52,26 +74,26 @@ class LeagueFinder(APIView, GlobalLevels,ValidateParamsMixIn):
         place_details = []
         for place in places:
             phone_num = 'Not Available'
+            web_site = 'Not Available'
             p_detail = self.google_maps.place(place_id=place)
             if 'formatted_phone_number' in p_detail['result']:
                 phone_num = p_detail['result']['formatted_phone_number']
-            place_details.append({'name':p_detail['result']['name'],'address':p_detail['result']['formatted_address'],'phone': phone_num})
+            if 'website' in p_detail['result']:
+                web_site = p_detail['result']['website']
+            place_details.append({'name':p_detail['result']['name'],'address':p_detail['result']['formatted_address'],'phone': phone_num,'website':web_site})
         return place_details
 
-    def create_query_string(self, age_req):
+    def create_query_string(self, level):
         qs = ''
-        level = self.get_player_level(int(age_req))
-        if level is None:
-            qs = f'{PROJECT_SPORT} league'
         if level is GlobalLevels.T_BALL:
             qs = f'{level} league'
         else:
-            qs = f'{level} {PROJECT_SPORT} league'
+            qs = f'{PROJECT_SPORT} league'
         return qs
     
 
-    def capture_request(self,zip,places_cnt):
-        serializer = SearchedLeaugesSerializer(data={'total_found':places_cnt, 
-                                                     'zip_searched':zip})
+    def capture_request(self,**kwargs):
+        serializer = SearchedLeaugesSerializer(data=kwargs['kwargs'])
+
         serializer.is_valid(raise_exception=True)
         serializer.save()

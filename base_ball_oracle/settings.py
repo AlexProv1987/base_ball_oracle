@@ -13,12 +13,11 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 
 #OpenAI Key
-OPEN_API_KEY = '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' 
-#os.environ.get('OPEN_API_KEY')
-OPEN_AI_MODEL = 'gpt-3.5-turbo'
+OPEN_API_KEY = os.environ['OPEN_API_KEY']
+#openAI Model
+OPEN_AI_MODEL = os.environ['OPEN_AI_MODEL']
 #Google Maps API
-GOOGLE_MAPS_API_KEY = 'AIzaSyAv29PAQvGNkPFgSrtYSQmCV1p-aac44iw'
-#AIzaSyAv29PAQvGNkPFgSrtYSQmCV1p-aac44iw
+GOOGLE_MAPS_API_KEY = os.environ['GOOGLE_MAPS_API_KEY']
 #sport type
 PROJECT_SPORT = 'baseball'
 
@@ -30,13 +29,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '0e9!)*k40rp#gvz5n5q8ar^&e4q!&@sx#!=-b1^n=d(z4!jy6k'
-#os.environ.get('SECRET_KEY')
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['base-ball-oracle-dev.us-east-1.elasticbeanstalk.com', 'apitest.aprovtestdmns.com',]
 
 
 # Application definition
@@ -49,15 +47,19 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
     'corsheaders',
+    'django_filters',
     'bb_oracle_apps.questions_api',
     'bb_oracle_apps.calculators',
     'bb_oracle_apps.league_finder',
+    'bb_oracle_apps.data_extracts',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "base_ball_oracle.middleware.HealthCheckMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -69,20 +71,23 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'base_ball_oracle.urls'
 
 CORS_ORIGIN_WHITELIST = (
-    'http://localhost:3000',
-)
+    "http://127.0.0.1:8000",
+    "http://localhost:3000",
+    "https://stable.d17lslnqu904pd.amplifyapp.com",
+    "https://master.d1h7gu3k5d0iyx.amplifyapp.com",
+    )
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [os.path.join(BASE_DIR, 'templates')],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
@@ -94,12 +99,17 @@ WSGI_APPLICATION = 'base_ball_oracle.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+if 'RDS_DB_NAME' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ['RDS_DB_NAME'],
+            'USER': os.environ['RDS_USERNAME'],
+            'PASSWORD': os.environ['RDS_PASSWORD'],
+            'HOST': os.environ['RDS_HOSTNAME'],
+            'PORT': os.environ['RDS_PORT'],
+        }
     }
-}
 
 
 # Password validation
@@ -142,3 +152,4 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
