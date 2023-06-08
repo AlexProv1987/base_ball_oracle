@@ -58,7 +58,7 @@ class LeagueFinder(APIView,GlobalLevels,ValidateParamsMixIn):
             return location
         except:
             return None
-        
+   
     def consolidate_response(self,locresponse):
         avail_list = []
         i = 0
@@ -94,5 +94,6 @@ class LeagueFinder(APIView,GlobalLevels,ValidateParamsMixIn):
 
     def capture_request(self,**kwargs):
         serializer = SearchedLeaugesSerializer(data=kwargs['kwargs'])
+
         serializer.is_valid(raise_exception=True)
         serializer.save()

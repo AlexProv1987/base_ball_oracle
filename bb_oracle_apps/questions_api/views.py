@@ -22,6 +22,7 @@ class Question(APIView,AIMessageMixIn,ValidateParamsMixIn):
             return Response(data={'answer':answer}, status=status.HTTP_200_OK)
         else:
             return Response(data={'error':'Invalid Params', 'available':self.get_accepted_params()}, status=status.HTTP_400_BAD_REQUEST)
+
     
     def capture_question(self,answer,request):
         serializer = QuestionInfoSerializer(data={'question_text':request, 'question_reply':answer})
