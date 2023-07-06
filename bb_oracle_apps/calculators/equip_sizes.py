@@ -53,12 +53,12 @@ class BatSize():
         "33": {"weight": range(121, 250), "height": range(61, 84)},
         "34": {"weight": range(161, 250), "height": range(69, 84)},
     }
-
+    '''Requested a different table that does not overlap'''
     bat_drop_chart = {
         '-12 to -10':range(0,10),
         '-10':range(10,13),
         '-8':range(12,14),
-        '-5':range(13,15),
+        '-5':range(14,15),
         '-3':range(15,100),
     }
 
