@@ -65,7 +65,7 @@ class GloveView(APIView, GloveSize, ValidateParamsMixIn):
         return scrape_string
 
 class BatView(APIView, BatSize, ValidateParamsMixIn):
-    accepted_params = {"height": str.__name__, "weight": int.__name__}
+    accepted_params = {"height": str.__name__, "weight": int.__name__, "age":int.__name__}
 
     def get(self, request, *args, **kwargs):
         if self.validate_keys(request, "all"):
@@ -77,7 +77,7 @@ class BatView(APIView, BatSize, ValidateParamsMixIn):
                     data={"bat_size": "None Found"}, status=status.HTTP_200_OK
                 )
             else:
-                drop = self.get_bat_drop(16)
+                drop = self.get_bat_drop(int(request.query_params["age"]))
                 scrape_product = WebScraper('https://www.google.com/search', 'https://www.google.com/' ,30,
                                   node_dict={
                                   'product_url':'//div[@class="zLPF4b"]/span["@class=eaGTj mQaFGe shntl"]/div/a/@href',
