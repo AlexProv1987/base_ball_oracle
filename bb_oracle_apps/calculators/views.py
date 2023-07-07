@@ -8,10 +8,22 @@ from parsel import Selector
 import requests
 from base_ball_oracle.settings import GEAR_SPONSOR
 from bb_oracle_apps.web_scraper.web_scrape import WebScraper
+from bb_oracle_apps.web_scraper.models import product_type
+from bb_oracle_apps.web_scraper.serializers import ScrapedProductSerializer
 # Create your views here.
-# https://parsel.readthedocs.io/en/latest/usage.html#examples
-# we are getting base64 back we need to extract from scripint..idk if can make that correct if its not in same node tree..how make fixes
-# img_url = text.xpath('//div[@class="ArOc1c"]/img').get()
+
+#this may not be best practice, but to lighten up on inheritance placing this here to be utilized to save the product scraped.
+#as this will only be used here if we continue to add product calcs to return products
+def save_product(product:dict, ptype_name:str):
+    p_type = product_type.objects.get(product_type=ptype_name) 
+    serializer = ScrapedProductSerializer(data={'product_type_reltn':p_type.pk, 
+                                                'product_name':product['product_name'].lower(), 
+                                                'vendor':product['product_vendor'].lower(),})
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+
+
+
 class GloveView(APIView, GloveSize, ValidateParamsMixIn):
     accepted_params = {"age": int.__name__, "position": str.__name__}
 
@@ -43,6 +55,7 @@ class GloveView(APIView, GloveSize, ValidateParamsMixIn):
                                    'tbm':"shop",
                                     })
                 products = scrape_product.scrape_first_item()
+                save_product(product=products, ptype_name='glove')
                 return Response(
                 data={'size':size,'product':products},
                 status=status.HTTP_200_OK,
@@ -94,6 +107,7 @@ class BatView(APIView, BatSize, ValidateParamsMixIn):
                                    'tbm':"shop",
                                     })
                 products = scrape_product.scrape_first_item()
+                save_product(product=products, ptype_name='bat')
                 return Response(
                     data={'bat_size':bat,'product':products},
                     status=status.HTTP_200_OK,
