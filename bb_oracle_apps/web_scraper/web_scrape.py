@@ -15,7 +15,7 @@ class WebScraper():
                 for the value found via the xpath
     
     Methods:
-
+    send_request -> called from any of the below methods to return the selector obj text. Can be called by itself itself if just desiring the selector obj text
     scrape_first_item -> grab the first node values for the node_dict specified
     scrape_by_keyword -> grab the first node values that matches the keyword specified
     scrape_all -> return all items for nodes specified, optional keyword to filter volume returned
@@ -31,6 +31,7 @@ class WebScraper():
         self.link_base = link_url_base
         self.timeout = timeout
         self.product_dict = {}
+        
     def send_request(self):
         html = requests.get(
             self.base_url, params=self.params, headers=self.headers, timeout=self.timeout
