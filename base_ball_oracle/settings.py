@@ -77,7 +77,7 @@ ROOT_URLCONF = 'base_ball_oracle.urls'
 
 CORS_ORIGIN_WHITELIST = (
     "https://stable.dxdvt0929qyzm.amplifyapp.com",
-    "https://stable.d17lslnqu904pd.amplifyapp.com/",
+    "https://stable.d17lslnqu904pd.amplifyapp.com",
     "http://127.0.0.1:8000",
     "http://localhost:3000",
      
