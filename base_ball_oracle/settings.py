@@ -34,7 +34,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['base-ball-oracle-dev.us-east-1.elasticbeanstalk.com', 'apitest.aprovtestdmns.com',]
+ALLOWED_HOSTS = ['base-ball-oracle-production.us-west-2.elasticbeanstalk.com','production.bsblprocarn.com']
 
 
 # Application definition
@@ -71,10 +71,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'base_ball_oracle.urls'
 
 CORS_ORIGIN_WHITELIST = (
-    "http://127.0.0.1:8000",
-    "http://localhost:3000",
-    "https://stable.d17lslnqu904pd.amplifyapp.com",
-    "https://master.d1h7gu3k5d0iyx.amplifyapp.com",
+    "https://baseballoracle.com",
     )
 
 TEMPLATES = [
