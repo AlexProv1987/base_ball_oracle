@@ -38,7 +38,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['base-ball-oracle-stable.us-west-2.elasticbeanstalk.com', 'stable.bsblprocarn.com']
+ALLOWED_HOSTS = ['base-ball-oracle-stable.us-west-2.elasticbeanstalk.com', 'stable.bsblprocarn.com',]
 
 
 # Application definition
