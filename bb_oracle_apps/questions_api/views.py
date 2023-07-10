@@ -10,7 +10,7 @@ from base_ball_oracle.global_mixins import ValidateParamsMixIn
 # Create your views here.
 
 class Question(APIView,AIMessageMixIn,ValidateParamsMixIn):
-    preq_val = f'Pretend you are a {PROJECT_SPORT} coach and explain the following in three sentences:'
+    preq_val = f'Pretend you are a {PROJECT_SPORT} coach and explain the following in 8 sentences or less:'
     question_key = 'question'
     ai_key = OPEN_API_KEY
     ai_model = OPEN_AI_MODEL
