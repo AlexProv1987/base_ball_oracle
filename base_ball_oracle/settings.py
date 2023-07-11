@@ -71,8 +71,13 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'base_ball_oracle.urls'
 
 CORS_ORIGIN_WHITELIST = (
-    "https://baseballoracle.com",
+    "http://127.0.0.1:8000",
+    "http://localhost:3000",
+    "https://stable.d17lslnqu904pd.amplifyapp.com",
     "https://master.d1h7gu3k5d0iyx.amplifyapp.com",
+    "https://master.d203db3lu1c7s3.amplifyapp.com",
+    "https://www.baseballoracle.com",
+    "https://baseballoracle.com",
 )
 
 TEMPLATES = [
