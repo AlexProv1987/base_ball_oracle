@@ -18,8 +18,12 @@ OPEN_API_KEY = os.environ['OPEN_API_KEY']
 OPEN_AI_MODEL = os.environ['OPEN_AI_MODEL']
 #Google Maps API
 GOOGLE_MAPS_API_KEY = os.environ['GOOGLE_MAPS_API_KEY']
+
 #sport type
 PROJECT_SPORT = 'baseball'
+
+#gear sponsor
+GEAR_SPONSOR = 'Marucci'
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -34,7 +38,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['base-ball-oracle-dev.us-east-1.elasticbeanstalk.com', 'apitest.aprovtestdmns.com',]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -54,6 +58,7 @@ INSTALLED_APPS = [
     'bb_oracle_apps.calculators',
     'bb_oracle_apps.league_finder',
     'bb_oracle_apps.data_extracts',
+    'bb_oracle_apps.web_scraper',
 ]
 
 MIDDLEWARE = [
