@@ -72,7 +72,8 @@ ROOT_URLCONF = 'base_ball_oracle.urls'
 
 CORS_ORIGIN_WHITELIST = (
     "https://baseballoracle.com",
-    )
+    "https://master.d1h7gu3k5d0iyx.amplifyapp.com",
+)
 
 TEMPLATES = [
     {
