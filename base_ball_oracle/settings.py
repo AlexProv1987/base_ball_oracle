@@ -23,7 +23,7 @@ GOOGLE_MAPS_API_KEY = os.environ['GOOGLE_MAPS_API_KEY']
 PROJECT_SPORT = 'baseball'
 
 #gear sponsor
-GEAR_SPONSOR = 'Marucci'
+GEAR_SPONSOR = ''
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
