@@ -80,7 +80,7 @@ CORS_ORIGIN_WHITELIST = (
     "https://stable.d17lslnqu904pd.amplifyapp.com",
     "http://127.0.0.1:8000",
     "http://localhost:3000",
-     
+
     )
 
 TEMPLATES = [
