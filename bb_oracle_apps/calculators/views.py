@@ -109,7 +109,9 @@ class BatView(APIView, BatSize, ValidateParamsMixIn):
                 products = scrape_product.scrape_first_item()
                 save_product(product=products, ptype_name='bat')
                 return Response(
-                    data={'bat_size':bat,'product':products},
+                    data={'bat_size':bat,
+                          'bat_drop':drop,
+                          'product':products},
                     status=status.HTTP_200_OK,
                 )
         else:
