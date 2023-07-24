@@ -95,6 +95,5 @@ class LeagueFinder(APIView,GlobalLevels,ValidateParamsMixIn):
 
     def capture_request(self,**kwargs):
         serializer = SearchedLeaugesSerializer(data=kwargs['kwargs'])
-
         serializer.is_valid(raise_exception=True)
         serializer.save()
