@@ -23,7 +23,7 @@ GOOGLE_MAPS_API_KEY = os.environ['GOOGLE_MAPS_API_KEY']
 PROJECT_SPORT = 'baseball'
 
 #gear sponsor
-GEAR_SPONSOR = 'Marucci'
+GEAR_SPONSOR = 'Marruci'
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'bb_oracle_apps.league_finder',
     'bb_oracle_apps.data_extracts',
     'bb_oracle_apps.web_scraper',
+    'bb_oracle_apps.forms_api',
 ]
 
 MIDDLEWARE = [

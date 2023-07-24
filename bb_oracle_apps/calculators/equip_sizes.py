@@ -1,9 +1,11 @@
 class GloveSize():
+    #this can be inherited, added base to globals.py class and forgot to update this - fix later
     level_chart = {
         "t-ball": range(0, 7),
         "youth": range(7, 13),
         "adult": range(13, 100),
     }
+
     glove_chart = {
         "t-ball": {
             "1st base": "8.5 - 10",
@@ -55,11 +57,12 @@ class BatSize():
     }
     '''Requested a different table that does not overlap'''
     bat_drop_chart = {
-        '-12 to -10':range(0,10),
-        '-10':range(10,13),
-        '-8':range(12,14),
-        '-5':range(14,15),
+        '-12':range(0,8),
+        '-10':range(8,12),
+        '-8':range(12,13),
+        '-5':range(13,15),
         '-3':range(15,100),
+
     }
 
     def get_bat_size(self, p_height, p_weight):

@@ -37,9 +37,9 @@ class LeagueFinder(APIView,GlobalLevels,ValidateParamsMixIn):
             places = self.google_maps.places_nearby(
                     keyword=self.create_query_string(level), 
                     location=self.get_person_location(request.query_params['zip']),
-                    #radius=ConvertValue.convert(25,1609),
+                    radius=ConvertValue.convert(25,1609),
                     language='en-US',
-                    rank_by='distance',
+                    #rank_by='distance',
                     )
             
             self.capture_request(kwargs={'age_searched':request.query_params['zip'],
@@ -95,6 +95,5 @@ class LeagueFinder(APIView,GlobalLevels,ValidateParamsMixIn):
 
     def capture_request(self,**kwargs):
         serializer = SearchedLeaugesSerializer(data=kwargs['kwargs'])
-
         serializer.is_valid(raise_exception=True)
         serializer.save()
