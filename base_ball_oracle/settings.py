@@ -18,8 +18,12 @@ OPEN_API_KEY = os.environ['OPEN_API_KEY']
 OPEN_AI_MODEL = os.environ['OPEN_AI_MODEL']
 #Google Maps API
 GOOGLE_MAPS_API_KEY = os.environ['GOOGLE_MAPS_API_KEY']
+
 #sport type
 PROJECT_SPORT = 'baseball'
+
+#gear sponsor
+GEAR_SPONSOR = 'Marruci'
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -34,7 +38,9 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
+
 ALLOWED_HOSTS = ['base-ball-oracle-production.us-west-2.elasticbeanstalk.com','production.bsblprocarn.com']
+
 
 
 # Application definition
@@ -54,6 +60,8 @@ INSTALLED_APPS = [
     'bb_oracle_apps.calculators',
     'bb_oracle_apps.league_finder',
     'bb_oracle_apps.data_extracts',
+    'bb_oracle_apps.web_scraper',
+    'bb_oracle_apps.forms_api',
 ]
 
 MIDDLEWARE = [
@@ -71,14 +79,12 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'base_ball_oracle.urls'
 
 CORS_ORIGIN_WHITELIST = (
-    "http://127.0.0.1:8000",
-    "http://localhost:3000",
-    "https://stable.d17lslnqu904pd.amplifyapp.com",
     "https://master.d1h7gu3k5d0iyx.amplifyapp.com",
     "https://master.d203db3lu1c7s3.amplifyapp.com",
     "https://www.baseballoracle.com",
     "https://baseballoracle.com",
 )
+
 
 TEMPLATES = [
     {

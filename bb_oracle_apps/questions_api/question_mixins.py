@@ -12,6 +12,7 @@ class AIMessageMixIn():
     question_key = None
     role = 'user'
 
+    #need to inherit APIView...idiot
     def get(self,request,*args,**kwargs):
         return Response(data=self.ai_answer(request.data[self.get_question_key()]), status=status.HTTP_200_OK)
     
