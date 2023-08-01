@@ -39,7 +39,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 DEBUG = False
 
 
-ALLOWED_HOSTS = ['base-ball-oracle-production.us-west-2.elasticbeanstalk.com','production.bsblprocarn.com']
+ALLOWED_HOSTS = ['base-ball-oracle-stable.us-west-2.elasticbeanstalk.com','stable.bsblprocarn.com']
 
 
 
