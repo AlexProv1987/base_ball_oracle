@@ -23,7 +23,7 @@ GOOGLE_MAPS_API_KEY = os.environ['GOOGLE_MAPS_API_KEY']
 PROJECT_SPORT = 'baseball'
 
 #gear sponsor
-GEAR_SPONSOR = 'Marruci'
+GEAR_SPONSOR = 'Rawlings'
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -83,6 +83,7 @@ CORS_ORIGIN_WHITELIST = (
     "https://master.d203db3lu1c7s3.amplifyapp.com",
     "https://www.baseballoracle.com",
     "https://baseballoracle.com",
+    "https://stable.dxdvt0929qyzm.amplifyapp.com/",
 )
 
 
